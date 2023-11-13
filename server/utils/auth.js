@@ -9,7 +9,7 @@ module.exports = {
   AuthenticaitonError: new GraphQLError('Could not authenticate user.', {
     extensions: {
       code: 'UNAUTHENTICATED',
-    }
+    },
   }),
   // function for our authenticated routes
   authMiddleware: function ({ req }) { // (req, res, next)
