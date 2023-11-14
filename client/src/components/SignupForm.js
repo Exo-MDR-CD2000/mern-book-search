@@ -4,6 +4,11 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
 
+//TODO: Replace the createUser() functionality imported from the API file with the ADD_USER mutation functionality.
+
+import { useMutation } from '@apollo/react-hooks';
+import { ADD_USER } from '../utils/mutations';
+
 const SignupForm = () => {
   // set initial form state
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
@@ -11,6 +16,10 @@ const SignupForm = () => {
   const [validated] = useState(false);
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
+
+  // import ADD_USER mutation here
+
+  const [addUser] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -28,13 +37,16 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await createUser(userFormData);
+      // const response = await createUser(userFormData);
+      const { data } = await addUser({
+        variables: { ...userFormData} // we are spreading the userFormData object into individual properties and passing them into the mutation function as variables
+      });
 
-      if (!response.ok) {
+      if (!data.addUser) { // change 'response.ok' to 'data.addUser'
         throw new Error('something went wrong!');
       }
 
-      const { token, user } = await response.json();
+      const { token, user } = data.addUser; // change 'await response.json()' to 'data.addUser' // await is not needed here because we are destructuring the data object
       console.log(user);
       Auth.login(token);
     } catch (err) {
