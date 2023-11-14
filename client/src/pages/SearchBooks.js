@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import {
   Container,
   Col,
@@ -6,11 +6,24 @@ import {
   Button,
   Card,
   Row
-} from 'react-bootstrap';
+} from 'react-bootstrap'; 
 
-import Auth from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
-import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
+import Auth from '../utils/auth'; 
+import { searchGoogleBooks } from '../utils/API'; // remove the saveBook() function imported from API file. we still need the searchGoogleBooks() function
+import { saveBookIds, getSavedBookIds } from '../utils/localStorage'; 
+
+import { useMutation } from '@apollo/react-hooks';
+import { SAVE_BOOK } from '../utils/mutations'; 
+
+//TODO: refractor this code to use the mutations and queries we created in the client/src/utils/mutations.js file
+// use the apollo useMutation() Hook to execute the SAVE_BOOK mutation in the handleSaveBook() function instead of the saveBook() function imported from API file
+
+// make sure to keep the logic for saving the book's ID to state in the try...catch block!
+
+
+
+
+
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -26,6 +39,14 @@ const SearchBooks = () => {
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
   });
+
+
+
+
+  // import the SAVE_BOOK mutation function from the mutations.js file and rename it SAVE_BOOKS
+
+  const [saveBook] = useMutation(SAVE_BOOK);
+
 
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event) => {
@@ -72,7 +93,10 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await saveBook(bookToSave, token);
+      //const response = await saveBook(bookToSave, token); // this is the only line that needs to be changed. 
+      const { response } = await saveBook({
+        variables: { input: bookToSave }
+      });
 
       if (!response.ok) {
         throw new Error('something went wrong!');
@@ -152,3 +176,12 @@ const SearchBooks = () => {
 };
 
 export default SearchBooks;
+
+
+
+// break down of the changes I made:
+// imported the SAVE_BOOK mutation from mutations.js line 16
+// imported the useMutation Hook from @apollo/react-hooks line 15
+// commented out the saveBook() function imported from API file line 12
+// create saveBook variable and set it equal to the saveBook mutation function line 48
+// modified handleSaveBook() function to use the saveBook mutation function instead of the saveBook() function imported from API file
