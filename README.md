@@ -21,7 +21,7 @@ Mongod must be running in the background (or just use MongoDB Compass).
 
 ## Deployment Link(s)
 
-- [Github Repo](https://github.com/Exo-MDR-CD2000/react-portfolio-jag)
+- [Github Repo](https://github.com/Exo-MDR-CD2000/mern-book-search)
 
 - [Heroku Deployed](WIP)
 
