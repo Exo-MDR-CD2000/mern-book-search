@@ -5,11 +5,11 @@ import SavedBooks from './pages/SavedBooks';
 import Navbar from './components/Navbar';
 
 import {
-  ApolloProvider,
-  InMemoryCache,
   ApolloClient,
-  createHttpLink
-} from '@apollo/react-hooks'; // we import all of the necessary packages from Apollo Client
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from '@apollo/client'; // we import all of the necessary packages from Apollo Client
 
 import { setContext } from '@apollo/client/link/context'; // this allows us to set the authentication header
 
