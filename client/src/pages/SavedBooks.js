@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+// import React, { useState, useEffect } from 'react';
 import {
   Container,
   Card,
@@ -11,7 +11,7 @@ import {
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_ME } from '../utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
 
@@ -56,10 +56,9 @@ const SavedBooks = () => {
   // }, [userDataLength]);
 
   const { loading, data } = useQuery(GET_ME);
+  const [removeBook, { error }] = useMutation(REMOVE_BOOK); // our imported mutation function set as a variable
   const userData = data?.me || {}; // provides defensive programming so that the data object will always have the me object available on it, which will always be an empty array if nothing has been saved yet
-
-
-  const [removeBook] = useMutation(REMOVE_BOOK); // our imported mutation function set as a variable
+  console.log(userData);
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
@@ -75,13 +74,13 @@ const SavedBooks = () => {
         variables: { bookId }
       });
 
-      if (!data.removeBook) {
-        throw new Error('something went wrong!');
-      }
+      // if (error) {
+      //   throw new Error('something went wrong!');
+      // }
 
       // const updatedUser = await response.json();
       // setUserData(updatedUser);
-      userData = data.removeBook; 
+      // userData = data.removeBook; 
       // upon success, remove book's id from localStorage
       removeBookId(bookId); // keep this
     } catch (err) {
